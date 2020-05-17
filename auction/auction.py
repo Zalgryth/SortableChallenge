@@ -62,8 +62,9 @@ class AuctionHelper(object):
             sortedBids = sorted(unit_bids, key=self.get_adjusted_value,
                                 reverse=True)
 
-            # TODO: What if the list is empty?
-            winning_bids.append(sortedBids[0])
+            # If there are no winning bids, don't add to the list.
+            if len(sortedBids) > 0:
+                winning_bids.append(sortedBids[0])
 
         return winning_bids
 
