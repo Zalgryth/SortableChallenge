@@ -52,10 +52,10 @@ class AuctionHelper(object):
                                     i.bidder in site_config.bidders,
                                     auction.bids))
 
-            # Adjustments, though based on averages, are estimates. The floor
-            # should only be calculated based on the actual bid, not the payout.
+            # The bid value must be greater than the floor after adjustments.
             unit_bids = list(filter(lambda i:
-                                    i.bid >= site_config.floor,
+                                    self.get_adjusted_value(
+                                        i) >= site_config.floor,
                                     unit_bids))
 
             # Order the bids by their adjusted value.
