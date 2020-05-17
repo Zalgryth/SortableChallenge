@@ -35,24 +35,33 @@ def print_json(data):
 
 def get_config() -> Config:
     with open(pathlib.Path(__file__).parent / './config.json') as config_file:
-        config_json_str = config_file.read()
+        config_json = config_file.read()
 
-    # TODO: Deserialize JSON into objects
-
-    return Config([Site("houseofcheese.com", ["AUCT", "BIDD"], 32)],
-                  [Bidder("AUCT", -0.0625), Bidder("BIDD", 0)])
+    return json.loads(config_json, object_hook=config_decoder)
 
 
 def get_auctions() -> Auction:
-    json_str = sys.stdin.read()
+    auction_json = sys.stdin.read()
 
-    # TODO: Deserialize JSON into objects
+    return json.loads(auction_json, object_hook=auction_decoder)
 
-    return [Auction("houseofcheese.com",
-                    ["banner", "sidebar"],
-                    [Bid("AUCT", "banner", 35),
-                     Bid("BIDD", "sidebar", 60),
-                     Bid("AUCT", "sidebar", 55)])]
+
+def config_decoder(data):
+    # There doesn't appear to be any easy way to convert JSON to Python objects...
+    # This will have to do for now.
+    if 'name' in data and 'bidders' in data and 'floor' in data:
+        return Site(data['name'], data['bidders'], data['floor'])
+    if 'name' in data and 'adjustment' in data:
+        return Bidder(data['name'], data['adjustment'])
+    return Config(data['sites'], data['bidders'])
+
+
+def auction_decoder(data):
+    # There doesn't appear to be any easy way to convert JSON to Python objects...
+    # This will have to do for now.
+    if 'bidder' in data and 'unit' in data and 'bid' in data:
+        return Bid(data['bidder'], data['unit'], data['bid'])
+    return Auction(data['site'], data['units'], data['bids'])
 
 
 if __name__ == '__main__':
