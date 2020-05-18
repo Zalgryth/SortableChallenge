@@ -44,10 +44,8 @@ class AuctionHelper(object):
     def __init__(self, config: Config):
         self._config = config
 
-        # TODO: Find a better way to do a .ToDictionary() equivalent in python
-        self._bidder_adjustments: Dict[str, float] = {}
-        for bidder in config.bidders:
-            self._bidder_adjustments[bidder.name] = bidder.adjustment
+        self._bidder_adjustments = dict(
+            (x.name, x.adjustment) for x in config.bidders)
 
     def get_winning_bids(self, auction: Auction) -> List[Bid]:
         """Get winning bids.
