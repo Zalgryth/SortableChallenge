@@ -59,12 +59,18 @@ class AuctionHelper(object):
 
         # Get configuration for the current site based on the auction name.
         site_config = next(
-            filter(lambda i: i.name == auction.site, self._config.sites))
+            filter(lambda i: i.name == auction.site, self._config.sites), None)
 
-        for unit in auction.units:
+        # No site config was found for the auction... Return the empty list.
+        if site_config is None:
+            return winning_bids
+
+        unique_units = list(set(auction.units))
+        for unit in unique_units:
             unit_bids = list(filter(lambda i: i.unit == unit and
                                     i.bidder in site_config.bidders and
-                                    i.bidder in self._bidder_adjustments.keys(),
+                                    i.bidder in self._bidder_adjustments.keys() and
+                                    i.bid >= 0,
                                     auction.bids))
 
             # The bid value must be greater than the floor after adjustments.
