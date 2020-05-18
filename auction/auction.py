@@ -12,6 +12,14 @@ class Bid(object):
         self.bid = bid
         self.unit = unit
 
+    def __eq__(self, other):
+        if not isinstance(other, Bid):
+            return NotImplemented
+
+        return self.bidder == other.bidder and \
+            self.bid == other.bid and \
+            self.unit == other.unit
+
 
 class Auction(object):
     """An auction request for a site with a list of available bids."""
@@ -20,6 +28,14 @@ class Auction(object):
         self.site = site
         self.units = units
         self.bids = bids
+
+    def __eq__(self, other):
+        if not isinstance(other, Auction):
+            return NotImplemented
+
+        return self.site == other.site and \
+            self.units == other.units and \
+            self.bids == other.bids
 
 
 class AuctionHelper(object):
@@ -36,12 +52,10 @@ class AuctionHelper(object):
     def get_winning_bids(self, auction: Auction) -> List[Bid]:
         """Get winning bids.
 
-        :param auction: The auction to perform winning big computation on.
+        :param auction: The auction to perform winning bid computation on.
         :return: Returns a list of winnings bids (per unit) for the auction.
         """
         winning_bids: List[Bid] = []
-
-        print("doing auction for site " + auction.site)
 
         # Get configuration for the current site based on the auction name.
         site_config = next(
@@ -49,7 +63,8 @@ class AuctionHelper(object):
 
         for unit in auction.units:
             unit_bids = list(filter(lambda i: i.unit == unit and
-                                    i.bidder in site_config.bidders,
+                                    i.bidder in site_config.bidders and
+                                    i.bidder in self._bidder_adjustments.keys(),
                                     auction.bids))
 
             # The bid value must be greater than the floor after adjustments.

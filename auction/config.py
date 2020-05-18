@@ -9,6 +9,14 @@ class Site(object):
         self.bidders = bidders
         self.floor = floor
 
+    def __eq__(self, other):
+        if not isinstance(other, Site):
+            return NotImplemented
+
+        return self.name == other.name and \
+            self.bidders == other.bidders and \
+            self.floor == other.floor
+
 
 class Bidder(object):
     """Contains configuration for a bidder."""
@@ -17,6 +25,13 @@ class Bidder(object):
         self.name = name
         self.adjustment = adjustment
 
+    def __eq__(self, other):
+        if not isinstance(other, Bidder):
+            return NotImplemented
+
+        return self.name == other.name and \
+            self.adjustment == other.adjustment
+
 
 class Config(object):
     """Contains all configuration for the Auction module."""
@@ -24,3 +39,10 @@ class Config(object):
     def __init__(self, sites: List[Site], bidders: List[Bidder]):
         self.sites = sites
         self.bidders = bidders
+
+    def __eq__(self, other):
+        if not isinstance(other, Config):
+            return NotImplemented
+
+        return self.sites == other.sites and \
+            self.bidders == other.bidders
