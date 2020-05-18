@@ -63,12 +63,7 @@ class AuctionHelper(object):
         if site_config is None:
             return winning_bids
 
-        processed_units: List[str] = []
         for unit in auction.units:
-            # We don't want to perform an auction on a unit we already did.
-            if unit in processed_units:
-                continue
-
             unit_bids = list(filter(lambda i: i.unit == unit and
                                     i.bidder in site_config.bidders and
                                     i.bidder in self._bidder_adjustments.keys() and
@@ -88,8 +83,6 @@ class AuctionHelper(object):
             # If there are no winning bids, don't add to the list.
             if len(sorted_bids) > 0:
                 winning_bids.append(sorted_bids[0])
-
-            processed_units.append(unit)
 
         return winning_bids
 

@@ -156,7 +156,7 @@ class TestAuctionHelper(unittest.TestCase):
 
         self.assertListEqual(expected_winning_bids, actual_winning_bids)
 
-    def test_winning_bid_duplicate_auction_units(self):
+    def test_winning_bid_duplicate_auction_units_performs_multiple_auctions(self):
         config = Config([Site("houseofcheese.com", ["AUCT", "BIDD"], 32)],
                         [Bidder("AUCT", -0.0625), Bidder("BIDD", 0)])
 
@@ -168,8 +168,9 @@ class TestAuctionHelper(unittest.TestCase):
 
         auction_helper = AuctionHelper(config)
 
-        # There should only be one winning bid for sidebar.
+        # There should be one winning bid per unit request, even if duplicate.
         expected_winning_bids = [Bid("AUCT", "banner", 35),
+                                 Bid("BIDD", "sidebar", 60),
                                  Bid("BIDD", "sidebar", 60)]
         actual_winning_bids = auction_helper.get_winning_bids(auction)
 
