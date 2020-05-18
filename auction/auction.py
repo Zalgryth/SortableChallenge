@@ -59,12 +59,12 @@ class AuctionHelper(object):
                                     unit_bids))
 
             # Order the bids by their adjusted value.
-            sortedBids = sorted(unit_bids, key=self.get_adjusted_value,
-                                reverse=True)
+            sorted_bids = sorted(unit_bids, key=self.get_adjusted_value,
+                                 reverse=True)
 
             # If there are no winning bids, don't add to the list.
-            if len(sortedBids) > 0:
-                winning_bids.append(sortedBids[0])
+            if len(sorted_bids) > 0:
+                winning_bids.append(sorted_bids[0])
 
         return winning_bids
 

@@ -26,14 +26,13 @@ def main():
 def print_json(data):
     """Prints JSON using the default encoder.
 
-    Parameters:
-    argument1 (int): Description of arg1
-
+    :param data: Data to serialize and print.
     """
     print(json.dumps(data, indent=4, cls=json_encoder.DefaultEncoder))
 
 
 def get_config() -> Config:
+    """Gets the Config data from the local config file."""
     with open(pathlib.Path(__file__).parent / './config.json') as config_file:
         config_json = config_file.read()
 
@@ -41,12 +40,14 @@ def get_config() -> Config:
 
 
 def get_auctions() -> Auction:
+    """Gets the Auction data from standard in."""
     auction_json = sys.stdin.read()
 
     return json.loads(auction_json, object_hook=auction_decoder)
 
 
 def config_decoder(data):
+    """A JSON Decoder to map a JSON object to a Config object."""
     # There doesn't appear to be any easy way to convert JSON to Python objects...
     # This will have to do for now.
     if 'name' in data and 'bidders' in data and 'floor' in data:
@@ -57,6 +58,7 @@ def config_decoder(data):
 
 
 def auction_decoder(data):
+    """A JSON Decoder to map a JSON object to an Auction object."""
     # There doesn't appear to be any easy way to convert JSON to Python objects...
     # This will have to do for now.
     if 'bidder' in data and 'unit' in data and 'bid' in data:
