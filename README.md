@@ -22,7 +22,7 @@ $ docker run -i -v /path/to/challenge/config.json:/auction/config.json challenge
 To run unit tests, execute the following command:
 
 ```bash
-$ python -m unittests
+$ python -m unittest
 ```
 
 For your convenience, you can get unit test results from the `challenge` Docker container (built in the `Build + Run` section). To do so, run the following command:
