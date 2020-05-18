@@ -173,6 +173,7 @@ class TestAuctionHelper(unittest.TestCase):
                                  Bid("BIDD", "sidebar", 60)]
         actual_winning_bids = auction_helper.get_winning_bids(auction)
 
+        self.assertEqual(len(expected_winning_bids), len(actual_winning_bids))
         self.assertListEqual(expected_winning_bids, actual_winning_bids)
 
     def test_winning_bid_site_not_in_config_no_winners(self):
